@@ -1,8 +1,7 @@
-var AdderAPP = (function ($) {
+var AjaxAPP = (function ($) {
 
     var $list = $(".js_list");
     var $form = $(".js_form");
-    var $input = $form.find("input");
     var $button = $form.find("button");
 
     function init() {
@@ -10,18 +9,11 @@ var AdderAPP = (function ($) {
     }
 
     function addEvents() {
-        $button.on('click', validate)
+        $button.on('click', getData)
     }
 
-    function validate(e) {
-        e.preventDefault();
+    function getData() {
 
-        if($.trim($input.val()) === ""){
-            $form.find('.form-group').addClass('has-danger');
-        } else {
-            $form.find('.form-group').removeClass('has-danger');
-            addElement($input.val());
-        }
     }
 
     function addElement(value) {
@@ -36,5 +28,5 @@ var AdderAPP = (function ($) {
 })(jQuery);
 
 $(document).ready(function () {
-    AdderAPP.init()
+    AjaxAPP.init()
 });
