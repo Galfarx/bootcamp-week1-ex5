@@ -1,5 +1,7 @@
-var AjaxAPP = (function ($) {
+var AjaxAPP = (function ($, Handlebars) {
 
+    var textTemplate = $("#li-template").html();
+    var compiledTemplate = Handlebars.compile(textTemplate);
     var $list = $(".js_list");
     var $form = $(".js_form");
     var $button = $form.find("button");
@@ -12,20 +14,30 @@ var AjaxAPP = (function ($) {
         $button.on('click', getData)
     }
 
-    function getData() {
+    function getData(e) {
+        e.preventDefault();
 
+        $.get('https://jsonplaceholder.typicode.com/users', function (data) {
+            addElement(data)
+        });
+
+        $button.prop('disabled', true);
     }
 
-    function addElement(value) {
-        var $li = $("<li></li>").text(value);
+    function addElement(data) {
+        var df = document.createDocumentFragment();
 
-        $list.append($li);
+        $.each(data, function (i, el) {
+            $(df).append(compiledTemplate(el));
+        });
+
+        $list.append(df);
     }
 
     return {
         init: init
     }
-})(jQuery);
+})(jQuery, Handlebars);
 
 $(document).ready(function () {
     AjaxAPP.init()
