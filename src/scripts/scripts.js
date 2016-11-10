@@ -17,14 +17,23 @@ var AjaxAPP = (function ($, Handlebars) {
     function getData(e) {
         e.preventDefault();
 
-        $.get('https://jsonplaceholder.typicode.com/users', function (data) {
+        $.getJSON('https://jsonplaceholder.typicode.com/users', function (data) {
             addElement(data)
+        })
+        .fail(function () {
+            renderErrorMessage("Ups! Stało się coś złego, nie udało się pobrać danych...");
         });
 
         $button.prop('disabled', true);
     }
 
     function addElement(data) {
+
+        if (data.length < 0) {
+            renderErrorMessage("Ups! Twoje dane gdzieś zniknęły...");
+            return -1;
+        }
+
         var df = document.createDocumentFragment();
 
         $.each(data, function (i, el) {
@@ -32,6 +41,15 @@ var AjaxAPP = (function ($, Handlebars) {
         });
 
         $list.append(df);
+    }
+
+    function renderErrorMessage(message) {
+        var $li = $("<li></li>", {
+            "class": "text-danger",
+            text: message
+        });
+
+        $list.append($li)
     }
 
     return {
